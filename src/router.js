@@ -11,31 +11,38 @@ Vue.use(VueRouter)
 
 const routes = [{
         path: '/',
-        redirect: '/cars'
+        redirect: '/cars',
+        name: 'cars'
     },
     {
         path: '/cars',
-        component: AppCars
+        component: AppCars,
+        name: 'cars'
     },
     {
         path: '/add',
-        component: AddCar
+        component: AddCar,
+        name: 'add-car'
     },
     {
         path: '/login',
-        component: Login
+        component: Login,
+        name: 'login'
     },
     {
         path: '/register',
-        component: Register
+        component: Register,
+        name: 'register'
     },
     {
         path: '/edit/:id',
-        component: AddCar
+        component: AddCar,
+        name: 'edit-car'
     },
     {
         path: '/cars/:id',
-        component: SingleCar
+        component: SingleCar,
+        name: 'single-car'
     },
 
 ]
@@ -45,14 +52,16 @@ export const router = new VueRouter({
     mode: 'history'
 })
 
-// router.beforeEach((to, from, next) => {
-//     if (to.name !== 'login' && to.name !== 'register' && !authService.isAuthenticated()) {
-//         return router.push({ name: 'login' });
-//     }
+//zadatak 10
+//obavezno gore dodati name za rute
+router.beforeEach((to, from, next) => {
+    if (to.name !== 'login' && to.name !== 'register' && !authService.isAuthenticated()) {
+        return router.push({ name: 'login' });
+    }
 
-//     if ((to.name === 'login' || to.name === 'register') && authService.isAuthenticated()) {
-//         return router.push({ name: from.name });
-//     }
+    if ((to.name === 'login' || to.name === 'register') && authService.isAuthenticated()) {
+        return router.push({ name: from.name });
+    }
 
-//     next()
-// })
+    next()
+})
