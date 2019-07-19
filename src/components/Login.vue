@@ -31,10 +31,8 @@ export default {
       login() {
         authService.login(this.email, this.password)
           .then( response => {
-            this.$router.push('/cars')
-            }).catch ( error => {
-            alert(error);
-            });
+            this.$router.push({ name: "cars" })
+          })
       }
     },
 }

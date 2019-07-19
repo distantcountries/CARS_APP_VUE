@@ -43,11 +43,11 @@ export default {
 
     methods: {
         register() {
-            registerService.register(this.newUser);
-            this.$router.push('/login');
-        },
-
-      
+            registerService.register(this.newUser)
+            .then(() => {
+                this.$router.push({ name: "login" })
+            })
+        }
     }
 }
 </script>

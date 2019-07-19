@@ -12,7 +12,7 @@ Vue.use(VueRouter)
 const routes = [{
         path: '/',
         redirect: '/cars',
-        name: 'cars'
+        name: 'carsDefault'
     },
     {
         path: '/cars',
@@ -35,14 +35,14 @@ const routes = [{
         name: 'register'
     },
     {
-        path: '/edit/:id',
-        component: AddCar,
-        name: 'edit-car'
-    },
-    {
         path: '/cars/:id',
         component: SingleCar,
         name: 'single-car'
+    },
+    {
+        path: '/edit/:id',
+        component: AddCar,
+        name: 'edit-car'
     },
 
 ]

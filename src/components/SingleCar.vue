@@ -21,7 +21,7 @@ export default {
     //umesto create()
     beforeRouteEnter (to, from, next) {
         next(vm => {
-            carsService.getCar(vm.$route.params.id)
+            carsService.get(vm.$route.params.id)
                 .then(response => {
                 vm.car = response.data;
                 }).catch(error => {

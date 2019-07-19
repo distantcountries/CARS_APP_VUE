@@ -3,10 +3,11 @@
         <ul v-for="(car, index) in cars" :key="index">
             <li>
                 <span style="font-weight:bold;" class="list-group-item list-group-item-info">
-                    <router-link :to="singleCar(car)">{{ car.brand }} </router-link>
+                    <router-link :to="singleCar(car.id)">{{ car.brand }} </router-link>
                     {{ car.model }}
                 </span>
-                <router-link :to="editCar(car)" style="background-color:#CD5C5C; color:white; padding:0.3rem; border-radius:0.3rem;" >Edit car</router-link>  
+                <button type="button" @click="editCar(car.id)">Edit</button>
+                <button type="button" @click="deleteCar(car.id)">Delete</button>
             </li>
         </ul>
     </div>
@@ -18,22 +19,8 @@ import { carsService } from '../services/CarsService'
 export default {
     data(){
         return {
-
             cars:[],
-
             errors:[],
-
-            car: {
-                id:'', 
-                brand:'', 
-                model:'',
-                year:'', 
-                maxSpeed:'', 
-                isAutomatic:'', 
-                engine:'', 
-                numberOfDoors:''
-            },
-
         }
     },
 
@@ -43,17 +30,28 @@ export default {
             this.cars = response.data
         })
         .catch(e => {
-            console.log(e)
+            console.log('Response data caras invalid!')
         })
     },
 
     methods: {
-        editCar(car){
-            return `/edit/${car.id}`
+        editCar(id) {
+            carsService.get(id)
+            .then(() => {
+                this.$router.push("edit/" + id);
+            })
         },
+        singleCar(id) {
+            return "/cars/" + id;
+        },  
 
-        singleCar (car) {
-            return `/cars/${car.id}`
+        deleteCar(id) {
+            carsService.delete(id)
+                .then(() => {this.$router.go();
+                })
+                .catch(e => {
+                    console.log('Delete car invalid!')
+                })
         },
 
     }

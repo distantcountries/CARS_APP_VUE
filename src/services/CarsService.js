@@ -19,8 +19,12 @@ export default class CarsService {
         return axios.put('cars/' + id, newCar)
     }
 
-    getCar(index) {
+    get(index) {
         return axios.get('cars/' + index)
+    }
+
+    delete(id) {
+        return axios.delete('cars/' + id)
     }
 }
 

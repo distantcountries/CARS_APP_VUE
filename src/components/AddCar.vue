@@ -1,8 +1,8 @@
 <template>  <!--zadatak 3 -->
     <div>
-        <router-view />
+        <!-- <router-view /> -->
 
-        <form @submit.prevent="addCar">
+        <form @submit.prevent="addCar(newCar)">
             <div style="width:50%; margin: 0 auto;">
                 <div class="form-group">
                     <label for="brand">Brand:</label>
@@ -53,10 +53,12 @@
                         <input type="radio" id="engine" v-model="newCar.engine" value="hybrid" />
                     Hybrid</label>
                 </div>
-                    <button type="submit">Submit car</button>
-                    <button type="reset" @click="editCar">Submit edited car</button>
+                    <button type="submit">Add a new car</button>
                     <button type="button" @click="resetForm">Reset form</button>
                     <button type="button" v-if="editable" @click="previewForm">Preview form</button>
+                    <!-- <div v-if="editable"> -->
+                        <button type="submit" @click="editCar(newCar.id, newCar)">Submit edited car</button>
+                    <!-- </div> -->
             </div>
         </form>
 
@@ -71,43 +73,20 @@ export default {
         return {
             years: Array(42).fill(1978).map((n, i) => n + i),
             editable: false,      
-
-            newCar: {
-                brand:'', 
-                model:'',
-                year:'', 
-                maxSpeed:'', 
-                isAutomatic:'', 
-                engine:'', 
-                numberOfDoors:''
-            },
+            newCar: { isAutomatic: false, maxSpeed: 0 },
         }
     },
 
     methods: {
-
-         getDefaults () {
-            return {
-                brand: "",
-                model: "",
-                year: null,
-                maxSpeed: null,
-                isAutomatic: false,
-                engine: "",
-                numberOfDoors: null
-            }
-        },
-
-        addCar() { //zadatak 3
-         carsService.addCar(this.newCar)
-                .then( response => {
-                    this.newCar = this.getDefaults();
-                    this.$router.push('/cars')
-                }).catch(error => {
+        addCar(newCar) { //zadatak 3
+         carsService.add(this.newCar)
+                .then(() => {
+                    this.newCar = { isAutomatic: false };
+                    this.$router.push("/cars");
+                })
+                .catch(error => {
                     alert('Error with adding car!');
                 });
-
-
         },
 
         resetForm() {
@@ -115,10 +94,10 @@ export default {
                 brand:'', 
                 model:'',
                 year:'', 
-                maxSpeed:'', 
-                isAutomatic:'', 
+                maxSpeed:0, 
+                isAutomatic:false, 
                 engine:'', 
-                numberOfDoors:''
+                numberOfDoors:0
             }
         },
 
@@ -126,12 +105,8 @@ export default {
             alert(JSON.stringify(this.newCar, null, 4))
         },
 
-        editCar(newCar){
-            carsService.edit(this.$route.params.id, this.newCar);
-        },
-
         getCar(id){
-            carsService.getCar(id)
+            carsService.get(id)
                 .then(response => {
                     this.newCar = response.data
                     console.log('Getting car!')
@@ -140,6 +115,9 @@ export default {
             })
         },
 
+        editCar(newCar){
+            carsService.edit(this.$route.params.id, this.newCar);
+        },
     },
 
     created(){
