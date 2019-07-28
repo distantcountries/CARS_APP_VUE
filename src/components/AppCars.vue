@@ -1,5 +1,6 @@
 <template>
     <div>
+
         <ul v-for="(car, index) in cars" :key="index">
             <li>
                 <span style="font-weight:bold;" class="list-group-item list-group-item-info">
@@ -10,6 +11,7 @@
                 <button type="button" @click="deleteCar(car.id)">Delete car</button>
             </li>
         </ul>
+         
     </div>
 </template>
 

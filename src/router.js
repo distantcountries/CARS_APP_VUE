@@ -17,7 +17,7 @@ const routes = [{
     {
         path: '/cars',
         component: AppCars,
-        name: 'cars'
+        name: 'cars',
     },
     {
         path: '/add',
@@ -44,6 +44,7 @@ const routes = [{
         component: AddCar,
         name: 'edit-car'
     },
+
 
 ]
 

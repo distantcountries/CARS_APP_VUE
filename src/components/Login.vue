@@ -1,6 +1,6 @@
 <template> <!-- zadatak 5 -->
     <div>
-        <form @submit.prevent="login">
+        <form @submit.prevent="submitForm">
             <div style="width:50%; margin: 0 auto;">
                 <div class="form-group">
                     <label for="email">Email:</label>
@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import { authService } from '../services/Auth.js'
 
 export default {
@@ -30,15 +31,29 @@ export default {
     },
 
     methods: {
-      login() {
-        authService.login(this.email, this.password)
-          .then(() => {
-            this.$router.push({ name: "cars" })
-          })
-          .catch(() => {
-            this.errorMessage = 'Something wrong with login!';
-          })
-      }, 
+      // login() {
+      //   authService.login(this.email, this.password)
+      //     .then(() => {
+      //       this.$router.push({ name: "cars" })
+      //     })
+      //     .catch(() => {
+      //       this.errorMessage = 'Something wrong with login!';
+      //     })
+      // }, 
+      
+      ...mapActions({
+            login:'login'
+        }),
+
+        submitForm() {
+            this.login({
+                email: this.email,
+                password: this.password
+            }).then(() => {
+                this.$router.push('/cars')
+            });
+        }
+      
     }
 }
 </script>

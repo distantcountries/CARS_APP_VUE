@@ -23,10 +23,11 @@ export default {
         next(vm => {
             carsService.get(vm.$route.params.id)
                 .then(response => {
-                vm.car = response.data;
-                }).catch(error => {
-                alert(error);
-            })
+                    vm.car = response.data;
+                }).
+                catch(error => {
+                    alert(error);
+                })
         })
     },
 }

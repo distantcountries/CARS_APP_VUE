@@ -5,16 +5,17 @@ export default class AuthService {
 
     constructor() {
         this.setAxiosDefaultAuthorizationHeader() //ovo dodajemo da bi se pri svakom loginu setovao token, kada se izlogujemo trebalo bi da nema greske
-            // this.user = {};
     }
 
     login(email, password) {
         return axios.post('http://localhost:8000/api/login', { //ruta iz api.php laravela koja vodi do login controllera
             email,
             password
-        }).then(data => {
-            window.localStorage.setItem('loginToken', data.data.token)
+        }).then(({ data }) => {
+            window.localStorage.setItem('loginToken', data.token) //{ data } stoji u liniji gore da ne bismo pisali data.data.token
+            window.localStorage.setItem('user', JSON.stringify(data.user)) //dodato
             this.setAxiosDefaultAuthorizationHeader()
+            return data.user;
         })
     }
 
@@ -25,6 +26,7 @@ export default class AuthService {
 
     logout() {
         window.localStorage.removeItem('loginToken')
+        window.localStorage.removeItem('user')
         delete axios.defaults.headers.common['Authorization']
         console.log('logout')
     }
