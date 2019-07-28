@@ -25,7 +25,7 @@ export default {
       return {
         email: '',
         password: '',
-        errorMessage:''
+        errorMessage:null
       }
     },
 
@@ -36,12 +36,9 @@ export default {
             this.$router.push({ name: "cars" })
           })
           .catch(() => {
-            errorLogin()
+            this.errorMessage = 'Something wrong with login!';
           })
       }, 
-      errorLogin() {
-          this.errorMessage= 'Something wrong with login!';
-      }
     }
 }
 </script>
