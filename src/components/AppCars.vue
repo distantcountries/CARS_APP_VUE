@@ -7,7 +7,7 @@
                     {{ car.model }}
                 </span>
                 <button type="button" @click="editCar(car.id)">Edit</button>
-                <button type="button" @click="deleteCar(car.id)">Delete</button>
+                <button type="button" @click="deleteCar(car.id)">Delete car</button>
             </li>
         </ul>
     </div>
@@ -45,14 +45,16 @@ export default {
             return "/cars/" + id;
         },  
 
-        deleteCar(id) {
+         deleteCar(id) {
             carsService.delete(id)
-                .then(() => {this.$router.go();
-                })
-                .catch(e => {
-                    console.log('Delete car invalid!')
-                })
-        },
+            .then(response => {
+                this.cars = this.cars.filter(car => car.id !== id) //this.car= da bismo modifikovali niz, u suprotnom bi ga smao filtrirao
+                console.log('Car is deleted')
+            })
+            .catch(error => {
+                alert('Error with getting cars')
+            })
+        }, 
 
     }
 

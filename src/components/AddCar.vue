@@ -3,63 +3,34 @@
         <!-- <router-view /> -->
 
         <form @submit.prevent="addCar(newCar)">
-            <div style="width:50%; margin: 0 auto;">
-                <div class="form-group">
-                    <label for="brand">Brand:</label>
-                    <input type="text" id="brand" v-model="newCar.brand" class="form-control" required />
-                </div>
-                <div class="form-group">
-                    <label for="model">Model:</label>
-                    <input type="text" id="model" v-model="newCar.model" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <label for="year">Year:</label>
-                    <select v-model="newCar.year">
-                        <option v-for="(year, index) in years" :key="index">
-                            {{ year }}
-                        </option>
-                    </select>
-                    <input type="text" id="brand" v-model="newCar.year" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <label for="maxSpeed">Max Speed:</label>
-                    <input type="number" id="maxSpeed" v-model="newCar.maxSpeed" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <label for="numberOfDoors">Number Of Doors:</label>
-                    <input type="number" id="numberOfDoors" v-model="newCar.numberOfDoors" class="form-control" />
-                </div>
-                <div class="form-check">
-                    <input type="checkbox" id="isAutomatic" v-model="newCar.isAutomatic" class="form-check-input" />
-                    <label for="isAutomatic">Is Automatic:</label>
-                </div>
-                <br>
-                <div class="form-check">
-                    <label>Engine:</label><br>
-
-                    <label for="engine" class="radio-inline" style="margin-right:1rem;">
-                        <input type="radio" id="engine" v-model="newCar.engine" value="diesel" />
-                    Diesel </label>
-
-                    <label for="engine" class="radio-inline" style="margin-right:1rem;">
-                        <input type="radio" id="engine" v-model="newCar.engine" value="petrol" />
-                    Petrol </label>
-
-                    <label for="engine" class="radio-inline" style="margin-right:1rem;">
-                        <input type="radio" id="engine" v-model="newCar.engine" value="electric" />
-                    Electric</label>
-
-                    <label for="engine" class="radio-inline" style="margin-right:1rem;">
-                        <input type="radio" id="engine" v-model="newCar.engine" value="hybrid" />
-                    Hybrid</label>
-                </div>
-                    <button type="submit">Add a new car</button>
-                    <button type="button" @click="resetForm">Reset form</button>
-                    <button type="button" v-if="editable" @click="previewForm">Preview form</button>
-                    <!-- <div v-if="editable"> -->
-                        <button type="submit" @click="editCar(newCar.id, newCar)">Submit edited car</button>
-                    <!-- </div> -->
+            <input type="text" placeholder="Brand..." class="form-control" v-model="newCar.brand" pattern=".{2,}" title="2 characters minimum" required />
+            <input type="text" placeholder="Model..." class="form-control" v-model="newCar.model" pattern=".{2,}" title="2 characters minimum" required />
+            <input type="number" placeholder="Max speed..." class="form-control" v-model="newCar.maxSpeed" />
+            <input type="number" placeholder="Number of doors..." class="form-control" v-model="newCar.numberOfDoors" required/>
+            <div class="form-control">
+                Year: 
+                <select v-model="newCar.year" required >
+                    <option v-for="(year, index) in yearsArray" :key="index" >
+                        {{ year }}
+                    </option>
+                </select>
+                Is automatic: 
+                <input type="checkbox"  v-model="newCar.isAutomatic"/>
             </div>
+            <div class="form-control">
+                Engine: 
+                <input type="radio" v-model="newCar.engine" value="diesel" name="selection" required /> Diesel
+                <input type="radio" v-model="newCar.engine" value="petrol" name="selection" /> Petrol
+                <input type="radio" v-model="newCar.engine" value="electric" name="selection" /> Electric
+                <input type="radio" v-model="newCar.engine" value="hybrid" name="selection" /> Hybrid
+                <!-- svi radio buttoni moraju imati isti name da bi required radio -->
+            </div>
+                <button type="submit">Add a new car</button>
+                <button type="button" @click="resetForm">Reset form</button>
+                <button type="button" v-if="editable" @click="previewForm">Preview form</button>
+                <!-- <div v-if="editable"> -->
+                    <button type="submit" @click="editCar(newCar.id, newCar)">Submit edited car</button>
+                <!-- </div> -->
         </form>
 
     </div>
@@ -71,17 +42,46 @@ import { carsService } from '../services/CarsService'
 export default {
     data(){
         return {
-            years: Array(42).fill(1978).map((n, i) => n + i),
             editable: false,      
-            newCar: { isAutomatic: false, maxSpeed: 0 },
+            newCar: {
+                brand:'', 
+                model:'', 
+                year:'', 
+                maxSpeed:'', 
+                isAutomatic: false, 
+                engine:'', 
+                numberOfDoors:''
+            },
+        }
+    },
+
+    computed: {
+        yearsArray() {
+            let years=[]
+            for(let i=1990; i<2020; i++){
+                years.push(i)
+            }
+            return years;
         }
     },
 
     methods: {
+        getDefaults() {
+            return {
+                brand: '',
+                model: '',
+                year: '',
+                maxSpeed: '',
+                isAutomatic: false,
+                engine: null,
+                numberOfDoors: ''
+            }
+        },
+
         addCar(newCar) { //zadatak 3
          carsService.add(this.newCar)
                 .then(() => {
-                    this.newCar = { isAutomatic: false };
+                    this.newCar = this.getDefaults();
                     this.$router.push("/cars");
                 })
                 .catch(error => {
@@ -94,10 +94,10 @@ export default {
                 brand:'', 
                 model:'',
                 year:'', 
-                maxSpeed:0, 
+                maxSpeed:'', 
                 isAutomatic:false, 
                 engine:'', 
-                numberOfDoors:0
+                numberOfDoors:''
             }
         },
 
@@ -109,15 +109,18 @@ export default {
             carsService.get(id)
                 .then(response => {
                     this.newCar = response.data
-                    console.log('Getting car!')
                 }).catch(e=>{
                     console.log(e)
             })
         },
 
-        editCar(newCar){
-            carsService.edit(this.$route.params.id, this.newCar);
-        },
+        editCar(newCar) {
+            carsService.edit(this.newCar)
+            .then(response => { 
+                console.log('Here is car for edit!')
+                })
+            .catch(error => alert('Problem with getting car!'))
+        }
     },
 
     created(){
@@ -126,10 +129,17 @@ export default {
            this.getCar(this.id)
        }
     }
-
 }
 </script>
 
 <style>
+    form {
+        width: 50%;
+        margin: 0 auto;
+    }
+
+    form input, form div, button {
+        margin-bottom: 0.5rem;
+    }
 
 </style>
