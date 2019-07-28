@@ -10,7 +10,10 @@
                     <label for="password">Password:</label>
                     <input type="password" id="password" v-model="password" class="form-control" />
                 </div>
-                 <button type="submit">Login</button>
+                 <button type="submit" @click="errorLogin">Login</button>
+                  <p class="errorMessage">
+                    {{ errorMessage }}
+                  </p>
             </div>
         </form>
     </div>
@@ -23,18 +26,29 @@ export default {
     data() {
       return {
         email: '',
-        password: ''
+        password: '',
+        errorMessage:''
       }
     },
 
     methods: {
       login() {
         authService.login(this.email, this.password)
-          .then( response => {
+          .then(() => {
             this.$router.push({ name: "cars" })
           })
+      }, 
+      errorLogin() {
+          this.errorMessage= 'Something wrong with login!';
       }
-    },
+    }
 }
 </script>
+
+<style>
+.errorMessage {
+  color: pink;
+}
+</style>
+
 

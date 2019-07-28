@@ -21,20 +21,22 @@
 <script>
 //zadatak 5
 import { authService } from './services/Auth'
-
   export default {
+    name: "app",
     data() {
       return {
-        isAuthenticated: authService.isAuthenticated()
-      }
+        isAuthenticated: false
+      };
     },
-
+    created() {
+      this.isAuthenticated = authService.isAuthenticated();
+    },
     methods: {
-      logout() { //zadatak 6
-        authService.logout()
-        this.isAuthenticated = false
+      logout() {
+        authService.logout();
+        this.$router.push("/login");
       }
     }
-  }
+};
 </script>
 

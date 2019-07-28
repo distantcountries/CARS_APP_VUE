@@ -29,8 +29,8 @@ export default {
         .then(response => {
             this.cars = response.data
         })
-        .catch(e => {
-            console.log('Response data caras invalid!')
+        .catch(() => {
+            console.log('Response data cars invalid!')
         })
     },
 
@@ -47,11 +47,11 @@ export default {
 
          deleteCar(id) {
             carsService.delete(id)
-            .then(response => {
+            .then(() => {
                 this.cars = this.cars.filter(car => car.id !== id) //this.car= da bismo modifikovali niz, u suprotnom bi ga smao filtrirao
                 console.log('Car is deleted')
             })
-            .catch(error => {
+            .catch(() => {
                 alert('Error with getting cars')
             })
         }, 

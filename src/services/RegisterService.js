@@ -8,8 +8,8 @@ export default class RegisterService {
 
     register(newUser) {
         return axios.post('register', newUser)
-            .catch(error => {
-                alert('INvalid Registration');
+            .catch(() => {
+                alert('Invalid Registration');
             })
     }
 }

@@ -84,7 +84,7 @@ export default {
                     this.newCar = this.getDefaults();
                     this.$router.push("/cars");
                 })
-                .catch(error => {
+                .catch(() => {
                     alert('Error with adding car!');
                 });
         },
@@ -109,17 +109,17 @@ export default {
             carsService.get(id)
                 .then(response => {
                     this.newCar = response.data
-                }).catch(e=>{
+                }).catch(() => {
                     console.log(e)
             })
         },
 
         editCar(newCar) {
             carsService.edit(this.newCar)
-            .then(response => { 
+            .then(() => { 
                 console.log('Here is car for edit!')
                 })
-            .catch(error => alert('Problem with getting car!'))
+            .catch(() => alert('Problem with getting car!'))
         }
     },
 

@@ -42,12 +42,19 @@ export default {
     },
 
     methods: {
-        register() {
+        register() { //preko registerService
             registerService.register(this.newUser)
             .then(() => {
                 this.$router.push({ name: "login" })
             })
-        }
+        }, 
+
+        // register() { //preko authService
+        //     authService.register(this.name, this.email, this.password)
+        //     .then(() => {
+        //         this.$router.push({ name: "login" });
+        //     });
+        // }
     }
 }
 </script>
